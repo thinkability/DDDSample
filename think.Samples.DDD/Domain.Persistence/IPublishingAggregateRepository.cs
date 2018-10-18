@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain.Persistence.Events;
 using Marten;
 
 namespace Domain.Persistence
@@ -16,7 +15,7 @@ namespace Domain.Persistence
         /// <param name="transientSession">If supplied, this session represents the transaction boundary. Remember to call SaveChanges yorself if you use this</param>
         Task StoreAsync(Aggregate aggregate, IDocumentSession transientSession = null);
 
-        Task<T> LoadAsync<T>(Guid id, int? version = null) where T : Aggregate;
+        Task<T> LoadAsync<T>(AggregateId id, int? version = null) where T : Aggregate;
 
         IDocumentSession CreateSession();
 

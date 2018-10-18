@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using Domain.Persistence.Events;
+using Domain;
+using Messaging.Contracts;
 using Microsoft.Extensions.Options;
 
 namespace Messaging.Kafka

@@ -12,7 +12,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Documents\Documents.csproj" />
-      <ProjectReference Include="..\Messaging\Messaging.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Messaging.Contracts\Messaging.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

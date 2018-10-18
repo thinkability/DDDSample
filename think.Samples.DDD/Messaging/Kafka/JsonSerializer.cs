@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Confluent.Kafka.Serialization;
-using Domain.Persistence.Events;
 using Newtonsoft.Json;
 
 namespace Messaging.Kafka

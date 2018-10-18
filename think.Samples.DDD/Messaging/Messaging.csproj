@@ -5,7 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Commands\Commands.csproj" />
       <ProjectReference Include="..\Documents\Documents.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Messaging.Contracts\Messaging.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

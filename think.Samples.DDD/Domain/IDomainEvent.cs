@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Domain.Persistence.Events
+﻿namespace Domain
 {
     public interface IDomainEvent
     {
-        Guid Id { get; }
+        AggregateId Id { get; }
         EventMetadata Metadata { get; }
     }
 }

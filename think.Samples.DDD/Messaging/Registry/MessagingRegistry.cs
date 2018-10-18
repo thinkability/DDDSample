@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Text;
+using Commands.Registry;
 using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Lamar;
+using Messaging.Contracts;
 using Messaging.Kafka;
 using Microsoft.Extensions.Options;
 
@@ -37,12 +39,17 @@ namespace Messaging.Registry
             For<ISerializingProducer<Null, object>>().Use(ctx =>
                 ctx.GetInstance<Producer>()
                     .GetSerializingProducer(new NullSerializer(), new JsonSerializer()));
+
+            For<ICommandRouter>().Use<LamarCommandRouter>();
+            For<IEventPublisher>().Use<KafkaPublisher>();
             
             Scan(x =>
             {
                 x.AssemblyContainingType<MessagingRegistry>();
                 x.WithDefaultConventions();
             });
+            
+            IncludeRegistry<CommandRegistry>();
         }
     }
 }

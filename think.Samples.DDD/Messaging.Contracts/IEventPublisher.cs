@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Domain.Persistence.Events;
+using Domain;
 
-namespace Messaging
+namespace Messaging.Contracts
    {
        public interface IEventPublisher
        {

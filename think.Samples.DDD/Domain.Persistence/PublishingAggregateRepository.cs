@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Domain.Persistence.Events;
 using Marten;
-using Messaging;
+using Messaging.Contracts;
 
 namespace Domain.Persistence
 {
@@ -28,7 +27,7 @@ namespace Domain.Persistence
                 // Take non-persisted events, push them to the event stream, indexed by the aggregate ID
                 var events = aggregate.GetUncommittedEvents().ToArray();
                 
-                session.Events.Append(aggregate.Id, events);
+                session.Events.Append(aggregate.Id.Value, events);
                 
                 //Only save and publish changes if it is our own session (meaning none supplied)
                 if (transientSession == null)
@@ -44,12 +43,12 @@ namespace Domain.Persistence
 
         private static readonly MethodInfo ApplyEvent = typeof(Aggregate).GetMethod("ApplyEvent", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        public async Task<T> LoadAsync<T>(Guid id, int? version = null) where T : Aggregate
+        public async Task<T> LoadAsync<T>(AggregateId id, int? version = null) where T : Aggregate
         {
             IReadOnlyList<Marten.Events.IEvent> events;
             using (var session = _store.LightweightSession())
             {
-                events = await session.Events.FetchStreamAsync(id, version ?? 0);                
+                events = await session.Events.FetchStreamAsync(id.Value, version ?? 0);                
             }
 
             if (events == null || !events.Any()) throw new InvalidOperationException($"No aggregate by id {id}.");

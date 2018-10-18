@@ -1,6 +1,5 @@
 using Lamar;
 using Marten;
-using Messaging.Registry;
 using Microsoft.Extensions.Options;
 
 namespace Domain.Persistence.Registry
@@ -10,8 +9,6 @@ namespace Domain.Persistence.Registry
         public PersistenceRegistry()
         {
             For<IDocumentStore>().Use(ctx => ConfigureEventstore(ctx));
-            
-            IncludeRegistry<MessagingRegistry>();
             
             Scan(x =>
             {

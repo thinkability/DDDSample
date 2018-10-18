@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using Domain.Persistence.Events;
 
-namespace Domain.Persistence
+namespace Domain
 {
     public abstract class Aggregate
     {
-        public Aggregate()
-        {
-            RegisterHandlers();
-        }
-        
         // For indexing our event streams
-        public Guid Id { get; protected set; }
+        public AggregateId Id { get; protected set; }
         
         // For protecting the state, i.e. conflict prevention
         public int Version { get; private set; }
 
         private readonly List<IDomainEvent> _uncommittedEvents = new List<IDomainEvent>();
         private readonly Dictionary<Type, Action<IDomainEvent>> _handlers = new Dictionary<Type, Action<IDomainEvent>>();
+        
+        public Aggregate()
+        {
+            RegisterHandlers();
+        }
     
         // Get the deltas, i.e. events that make up the state, not yet persisted
         public IEnumerable<IDomainEvent> GetUncommittedEvents()

@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace Messaging
+﻿namespace Messaging.Contracts
 {
     public interface IQueryRouter
     {
