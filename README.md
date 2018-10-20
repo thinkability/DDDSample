@@ -1,3 +1,5 @@
+[![Build status](https://thinkability.visualstudio.com/DDDSample/_apis/build/status/DDDSample-ASP.NET%20Core-CI)](https://thinkability.visualstudio.com/DDDSample/_build/latest?definitionId=-1) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
+
 # DDD Sample for Marten and Kafka
 This sample is still in it's early stages. But great stuff is coming! (at least it's planned :-o )
 
