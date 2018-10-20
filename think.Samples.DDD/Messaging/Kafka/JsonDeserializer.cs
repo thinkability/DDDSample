@@ -5,15 +5,15 @@ using Newtonsoft.Json;
 
 namespace Messaging.Kafka
 {
-    public class JsonDeserializer : IDeserializer<object>
+    public class JsonDeserializer<T> : IDeserializer<T>
     {
         public void Dispose()
         {
         }
 
-        public object Deserialize(string topic, byte[] data)
+        public T Deserialize(string topic, byte[] data)
         {
-            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data));
+            return JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(data));
         }
 
         public IEnumerable<KeyValuePair<string, object>> Configure(IEnumerable<KeyValuePair<string, object>> config, bool isKey)

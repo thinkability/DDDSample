@@ -7,7 +7,7 @@ namespace Domain.Aggregates.Champagne.Events
     {
         public ChampagneName Name { get; private set; }
         
-        public ChampagneCreated(AggregateId id, ChampagneName name, EventMetadata metadata = null) : base(id, metadata)
+        public ChampagneCreated(Guid id, ChampagneName name, EventMetadata metadata = null) : base(id, metadata)
         {
             Name = name;
         }

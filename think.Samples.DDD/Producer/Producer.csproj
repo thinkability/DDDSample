@@ -6,12 +6,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoFixture" Version="4.5.0" />
       <PackageReference Include="Lamar" Version="1.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Commands\Commands.csproj" />
       <ProjectReference Include="..\Messaging\Messaging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

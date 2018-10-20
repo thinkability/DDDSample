@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documents", "Documents\Docu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Contracts", "Messaging.Contracts\Messaging.Contracts.csproj", "{C7B1363F-EAAF-49FC-B01C-82190167CA36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectionsHost", "ProjectionsHost\ProjectionsHost.csproj", "{5C41FBCA-DF3C-4499-99E0-955A1B738055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{C7B1363F-EAAF-49FC-B01C-82190167CA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7B1363F-EAAF-49FC-B01C-82190167CA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7B1363F-EAAF-49FC-B01C-82190167CA36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C41FBCA-DF3C-4499-99E0-955A1B738055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C41FBCA-DF3C-4499-99E0-955A1B738055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C41FBCA-DF3C-4499-99E0-955A1B738055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C41FBCA-DF3C-4499-99E0-955A1B738055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

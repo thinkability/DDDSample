@@ -1,8 +1,10 @@
-﻿namespace Domain
+﻿using System;
+
+namespace Domain
 {
     public interface IDomainEvent
     {
-        AggregateId Id { get; }
+        Guid Id { get; }
         EventMetadata Metadata { get; }
     }
 }

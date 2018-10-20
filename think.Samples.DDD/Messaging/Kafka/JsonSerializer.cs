@@ -5,13 +5,13 @@ using Newtonsoft.Json;
 
 namespace Messaging.Kafka
 {
-    public class JsonSerializer : ISerializer<object>
+    public class JsonSerializer<T> : ISerializer<T>
     {
         public void Dispose()
         {
         }
 
-        public byte[] Serialize(string topic, object data)
+        public byte[] Serialize(string topic, T data)
         {
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
         }

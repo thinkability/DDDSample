@@ -6,6 +6,8 @@ namespace Domain
     {
         public AggregateId(Guid value) : base(value)
         {
+            if(value == Guid.Empty)
+                throw new ArgumentException(nameof(value));
         }
     }
 }

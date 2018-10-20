@@ -2,6 +2,7 @@ using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture;
 using Commands.Handlers.Champagne;
 using Messaging.Contracts;
 
@@ -18,12 +19,15 @@ namespace Producer
 
         public async Task Produce()
         {
-            while (!Console.KeyAvailable)
+            var fixture = new Fixture();
+            
+            while (1 == 1)
             {
-                var id = await _commandRouter.RouteAsync<CreateChampagneCommand, IdResponse>(new CreateChampagneCommand("My new pagne"));
+                var name = fixture.Create<string>();
+                var id = await _commandRouter.RouteAsync<CreateChampagneCommand, IdResponse>(new CreateChampagneCommand(name));
                 
-                Console.WriteLine($"Champagne created: {id}");
-                Thread.Sleep(2000);
+                Console.WriteLine($"Champagne created: {id.Id} - {name}");
+                await Task.Delay(2000);
             }
         }
     }

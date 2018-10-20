@@ -12,14 +12,14 @@ namespace Domain.Aggregates.Champagne
         
         public void Execute(CreateChampagne cmd)
         {
-            RaiseEvent(new ChampagneCreated(cmd.Id, cmd.Name));
+            RaiseEvent(new ChampagneCreated(cmd.Id.Value, cmd.Name));
         }
         
         protected override void RegisterHandlers()
         {
             Handle<ChampagneCreated>(e =>
             {
-                Id = e.Id;
+                Id = new AggregateId(e.Id);
                 Name = e.Name;
             });
         }
