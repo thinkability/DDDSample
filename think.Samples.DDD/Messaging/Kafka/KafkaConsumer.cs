@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
@@ -16,17 +18,21 @@ namespace Messaging.Kafka
         private readonly IEventHandlerFactory _eventHandlerFactory;
         private Consumer<Ignore, MessageEnvelope> _consumer;
         private TimeSpan _defaultTimeout = TimeSpan.FromSeconds(1);
-        
+
+        private HashSet<Subscription> _subscriptions = new HashSet<Subscription>();
+
+        private bool _isConsuming;
+
         public KafkaConsumer(IEventHandlerFactory eventHandlerFactory, IOptions<MessagingConfig> options)
         {
             _eventHandlerFactory = eventHandlerFactory;
-            
+
             var config = new Dictionary<string, object>()
             {
                 ["bootstrap.servers"] = options.Value.KafkaBootstrapServers,
                 ["group.id"] = "default-consumer-group",
                 ["retries"] = 0,
-                ["client.id"] = options.Value.KafkaClientId,
+                ["client.id"] = options.Value.KafkaClientId ?? options.Value.Service,
                 ["batch.num.messages"] = 1,
                 ["socket.blocking.max.ms"] = 1,
                 ["socket.nagle.disable"] = true,
@@ -36,27 +42,55 @@ namespace Messaging.Kafka
                     ["acks"] = 1
                 }
             };
-            
-            _consumer = new Consumer<Ignore, MessageEnvelope>(config, new IgnoreDeserializer(), new JsonDeserializer<MessageEnvelope>());
+
+            _consumer = new Consumer<Ignore, MessageEnvelope>(config, new IgnoreDeserializer(),
+                new JsonDeserializer<MessageEnvelope>());
+        }
+        
+        public async Task StartConsumer<TEvent>(Subscription<TEvent> subscription)
+        {
+            await StartConsumer(new[] {subscription});
         }
 
-        public async Task Consume<TEvent>(string boundedContextName, string eventName)
+        public async Task StartConsumer(IEnumerable<Subscription> subscriptions)
         {
-            var topic = $"{boundedContextName}.{eventName}";
-            _consumer.Assign(new []{ new TopicPartitionOffset(topic, 0, Offset.Beginning) });
-            _consumer.Subscribe(topic);
-            
-            while (true)
+            _subscriptions = new HashSet<Subscription>(subscriptions);
+            var topics = _subscriptions.Select(x => Convention.TopicName(x.BoundedContext, x.EventName));
+            _consumer.Assign(topics.Select(x => new TopicPartition(x, 0)));
+            _consumer.Subscribe(topics);
+
+            _isConsuming = true;
+
+            while (_isConsuming)
             {
                 var exist = _consumer.Consume(out var msg, _defaultTimeout);
 
                 if (!exist) continue;
-                var eventType = Type.GetType(msg.Value.PayloadType);
-                var @event = ((JObject)msg.Value.Payload).ToObject<TEvent>();
 
-                var handler = _eventHandlerFactory.GetEventHandler<TEvent>();
-                await handler.Handle(@event);
+                var subscription = _subscriptions.SingleOrDefault(x =>
+                    string.Equals(Convention.TopicName(x.BoundedContext, x.EventName), msg.Topic));
+
+                if (subscription == null)
+                    throw new ConsumingException("Unexpected message consumed: No subscription registered");
+
+                var @event = ((JObject) msg.Value.Payload).ToObject(subscription.EventType);
+
+
+                var factory = typeof(IEventHandlerFactory)
+                    .GetMethod(nameof(IEventHandlerFactory.GetEventHandler))
+                    .MakeGenericMethod(subscription.EventType);
+                var handler = factory.Invoke(_eventHandlerFactory, null);
+
+                var handle = typeof(IEventHandler<>)
+                    .GetMethod("Handle")
+                    .MakeGenericMethod(subscription.EventType);
+                await (Task) handle.Invoke(handler, new[] {@event});
             }
+        }
+
+        public void StopConsumer()
+        {
+            _isConsuming = false;
         }
 
         public void Dispose()
@@ -67,6 +101,29 @@ namespace Messaging.Kafka
 
     public interface IConsumer : IDisposable
     {
-        Task Consume<TEvent>(string boundedContextName, string eventName);
+        Task StartConsumer<TEvent>(Subscription<TEvent> subscription);
+        Task StartConsumer(IEnumerable<Subscription> subscriptions);
+        void StopConsumer();
+    }
+
+    public abstract class Subscription
+    {
+        public string BoundedContext { get; protected set; }
+        public string EventName { get; protected set; }
+        public Type EventType { get; protected set; }
+
+        public Subscription()
+        {
+        }
+    }
+
+    public class Subscription<TEvent> : Subscription
+    {
+        public Subscription(string boundedContext, string eventName)
+        {
+            BoundedContext = boundedContext;
+            EventName = eventName;
+            EventType = typeof(TEvent);
+        }
     }
 }

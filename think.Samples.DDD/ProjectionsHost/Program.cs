@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Domain.Aggregates.Champagne.Events;
@@ -36,10 +37,18 @@ namespace ProjectionsHost
 
                 x.IncludeRegistry<ProjectionsHostRegistry>();
             });
+            
+            StartConsumer().Wait();
+        }
 
+        private static async Task StartConsumer()
+        {
             using (var consumer = Container.GetInstance<IConsumer>())
             {
-                consumer.Consume<ChampagneCreated>("thinkSample", "ChampagneCreated").Wait();
+                await consumer.StartConsumer(new[]
+                {
+                    new Subscription<ChampagneCreated>("thinkSample", "ChampagneCreated"),
+                });
 
                 while (true)
                 {

@@ -23,9 +23,10 @@ namespace Messaging.Registry
                 {
                     ["bootstrap.servers"] = options.KafkaBootstrapServers,
                     ["retries"] = 0,
-                    ["client.id"] = options.KafkaClientId,
+                    ["client.id"] = options.KafkaClientId ?? options.Service,
                     ["batch.num.messages"] = 1,
                     ["socket.blocking.max.ms"] = 1,
+                    ["socket.timeout.ms"] = 500,
                     ["socket.nagle.disable"] = true,
                     ["queue.buffering.max.ms"] = 0,
                     ["default.topic.config"] = new Dictionary<string, object>

@@ -17,19 +17,15 @@ namespace Messaging.Kafka
             _config = config.Value;
         }
         
-        public async Task PublishAsync<TEvent>(TEvent @event) where TEvent : IDomainEvent
+        public async Task PublishAsync<TEvent>(TEvent @event, EventMetadata metadata) where TEvent : IDomainEvent
         {
-            var envelope = new MessageEnvelope(@event, @event.Metadata);
+            var envelope = new MessageEnvelope(@event, metadata);
+            var topic = Convention.TopicName(_config.BoundedContext, @event.GetType().Name);
             
-            var res = await _producer.ProduceAsync(GetTopicByConvention<TEvent>(@event), null, envelope);
+            var res = await _producer.ProduceAsync(topic, null, envelope);
 
             if (res.Error.HasError)
                 throw new PublishingException(res.Error.Reason);
-        }
-
-        private string GetTopicByConvention<TEvent>(TEvent @event)
-        {
-            return $"{_config.BoundedContext}.{@event.GetType().Name}";
         }
     }
 }

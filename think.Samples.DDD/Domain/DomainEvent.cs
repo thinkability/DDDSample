@@ -4,13 +4,11 @@ namespace Domain
 {
     public class DomainEvent : IDomainEvent
     {
-        public DomainEvent(Guid id, EventMetadata metadata = null)
+        public DomainEvent(Guid id)
         {
             Id = id;
-            Metadata = metadata;
         }
 
         public Guid Id { get; }
-        public EventMetadata Metadata { get; set; }
     }
 }
