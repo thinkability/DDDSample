@@ -83,7 +83,8 @@ namespace Domain.Persistence
         {
             foreach (var @event in events)
             {
-                await _eventPublisher.PublishAsync(@event);
+                //TODO: Get metadata from eventstream
+                await _eventPublisher.PublishAsync(@event, new EventMetadata(DateTimeOffset.Now, Guid.Empty, 0));
             }
         }
     }

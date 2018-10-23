@@ -21,7 +21,7 @@ namespace Producer
         {
             var fixture = new Fixture();
             
-            while (1 == 1)
+            while (true)
             {
                 var name = fixture.Create<string>();
                 var id = await _commandRouter.RouteAsync<CreateChampagneCommand, IdResponse>(new CreateChampagneCommand(name));

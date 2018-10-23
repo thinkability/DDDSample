@@ -6,6 +6,8 @@ namespace Messaging
         public string Service { get; set; }
         public string KafkaBootstrapServers { get; set; }
         public string KafkaClientId { get; set; }
+        public string ConsumerGroupId { get; set; }
+        
         
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domain
+namespace Messaging.Contracts
 {
     public class EventMetadata
     {

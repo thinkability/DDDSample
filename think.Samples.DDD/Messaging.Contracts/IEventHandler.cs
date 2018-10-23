@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace Messaging.Contracts
 {
-    public interface IEventHandler<TEvent>
+    public interface IEventHandler<in TEvent>
     {
         Task Handle(TEvent @event);
     }

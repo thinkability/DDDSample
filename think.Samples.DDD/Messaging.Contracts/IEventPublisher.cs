@@ -5,6 +5,6 @@ namespace Messaging.Contracts
    {
        public interface IEventPublisher
        {
-           Task PublishAsync<TEvent>(TEvent @event) where TEvent : IDomainEvent;
+           Task PublishAsync<TEvent>(TEvent @event, EventMetadata metadata) where TEvent : IDomainEvent;
        }
    }
