@@ -31,7 +31,7 @@ namespace Messaging.Kafka
             var config = new Dictionary<string, object>()
             {
                 ["bootstrap.servers"] = options.Value.KafkaBootstrapServers,
-                ["group.id"] = "default-consumer-group",
+                ["group.id"] = options.Value.ConsumerGroupId,
                 ["retries"] = 0,
                 ["client.id"] = options.Value.KafkaClientId ?? options.Value.Service,
                 ["batch.num.messages"] = 1,
@@ -102,34 +102,6 @@ namespace Messaging.Kafka
         public void Dispose()
         {
             _consumer?.Dispose();
-        }
-    }
-
-    public interface IConsumer : IDisposable
-    {
-        Task StartConsumer<TEvent>(Subscription<TEvent> subscription);
-        Task StartConsumer(IEnumerable<Subscription> subscriptions);
-        void StopConsumer();
-    }
-
-    public abstract class Subscription
-    {
-        public string BoundedContext { get; protected set; }
-        public string EventName { get; protected set; }
-        public Type EventType { get; protected set; }
-
-        public Subscription()
-        {
-        }
-    }
-
-    public class Subscription<TEvent> : Subscription
-    {
-        public Subscription(string boundedContext, string eventName)
-        {
-            BoundedContext = boundedContext;
-            EventName = eventName;
-            EventType = typeof(TEvent);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Messaging.Contracts
             CancellationToken cancellationToken = default(CancellationToken))
             where TCommand : ICommand<TResponse>;
         
-        Task RouteAsync<TCommand>(TCommand command, CancellationToken cancellationToken) 
+        Task RouteAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default(CancellationToken)) 
             where TCommand : ICommand<Response>;
     }
     
