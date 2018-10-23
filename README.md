@@ -8,7 +8,7 @@ But for now, I have a working structure for command handlers, eventsourced domai
 ## Technologies used
 I'm playing a bit around with these technologies for now:
 * [Marten](http://jasperfx.github.io/marten/) (a really clever document store abstraction over Postgres). It's used for storing the eventstream from the domain events
-* [Kafka](https://github.com/confluentinc/confluent-kafka-dotnet/) for distributing events in a distributed way. My local Kafka is running on docker using the wurstmeister/kafka image
+* [Kafka](https://github.com/confluentinc/confluent-kafka-dotnet/) for distributing events in a distributed way. My local Kafka is running on docker using the wurstmeister/kafka image. Please know that I am completely new to Kafka, so this is a very preliminar implementation.
 * [Lamar](https://jasperfx.github.io/lamar/) (the new beginning of StructureMap) for IoC
 
 ## Roadmap
