@@ -21,7 +21,7 @@ namespace Messaging
             return await _container.GetInstance<ICommandHandler<TCommand, TResponse>>().Handle(command);
         }
 
-        public async Task RouteAsync<TCommand>(TCommand command, CancellationToken cancellationToken) where TCommand : ICommand<Response>
+        public async Task RouteAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default(CancellationToken)) where TCommand : ICommand<Response>
         {
             await _container.GetInstance<ICommandHandler<TCommand>>().Handle(command);
         }

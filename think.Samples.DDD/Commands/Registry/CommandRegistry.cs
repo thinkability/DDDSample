@@ -10,12 +10,7 @@ namespace Commands.Registry
         public CommandRegistry()
         {
             For<ICommandHandler<CreateChampagneCommand, IdResponse>>().Use<ChampagneHandler>();
-            
-            Scan(x =>
-            {
-                x.AssemblyContainingType<CommandRegistry>();
-                x.WithDefaultConventions();
-            });
+            For<ICommandHandler<RenameChampagneCommand>>().Use<ChampagneHandler>();
             
             IncludeRegistry<PersistenceRegistry>();
         }

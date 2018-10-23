@@ -19,7 +19,7 @@ namespace ProjectionsHost
     class Program
     {
         public static IContainer Container;
-        
+
         static void Main(string[] args)
         {
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -37,28 +37,33 @@ namespace ProjectionsHost
 
                 x.IncludeRegistry<ProjectionsHostRegistry>();
             });
-            
+
             StartConsumer().Wait();
         }
 
         private static async Task StartConsumer()
         {
-            using (var consumer = Container.GetInstance<IConsumer>())
+            var eventHandlers = Container.GetInstance<IConsumer>();
+            await eventHandlers.StartConsumer(new Subscription[]
             {
-                await consumer.StartConsumer(new[]
-                {
-                    new Subscription<ChampagneCreated>("thinkSample", "ChampagneCreated"),
-                });
+                new Subscription<ChampagneCreated>("thinkSample", "ChampagneCreated"),
+                new Subscription<ChampagneRenamed>("thinkSample", "ChampagneRenamed"), 
+            });
 
-                while (true)
-                {
-                    // Don't shut down yet
-                }
+            var integrationEventPublisher = Container.GetInstance<IConsumer>();
+            await integrationEventPublisher.StartConsumer(new[]
+            {
+                new Subscription<ChampagneCreated>("thinkSample", "ChampagneCreated"),
+            });
+
+            while (true)
+            {
+                // Don't shut down yet
             }
         }
     }
-    
-    
+
+
     public static class ConfigurationExtensions
     {
         public static IConfigurationSection OrSection(this IConfiguration config, string key)

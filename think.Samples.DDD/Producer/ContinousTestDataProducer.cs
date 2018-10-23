@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,15 +21,44 @@ namespace Producer
 
         public async Task Produce()
         {
-            var fixture = new Fixture();
+            var random = new Random();
             
+            var styles = new[] {"Brut", "Rosé", "On Ice", "Vintage", ""};
+            var characters = new[] {"Grand Cru", "Premier Cru", "Prestige Cuvée", "Cuvée"};
+            var dosages = new[] {"Extra-Brut", "Brut", "Sec", "Demi-Sec", "Doux"};
+            var estates = new[] {"Lars", "DAD", "Tour-de-Code", "Vinofactorie"};
+            var labels = new[] {"1973", "2003", "1998", "1996", "Black Label", "Nocturne"};
+
+            T SelectOne<T>(IEnumerable<T> options)
+            {
+                var idx = random.Next(0, options.Count() - 1);
+                return options.ElementAt(idx);
+            }
+
+            var champagnes = new List<Guid>();
+
             while (true)
             {
-                var name = fixture.Create<string>();
-                var id = await _commandRouter.RouteAsync<CreateChampagneCommand, IdResponse>(new CreateChampagneCommand(name));
-                
-                Console.WriteLine($"Champagne created: {id.Id} - {name}");
-                await Task.Delay(2000);
+                var name =
+                    $"{SelectOne(estates)}'s {SelectOne(characters)} {SelectOne(labels)} {SelectOne(styles)} {SelectOne(dosages)}";
+
+                if (!champagnes.Any() || random.Next(0, 10) > 5)
+                {
+                    var response =
+                        await _commandRouter.RouteAsync<CreateChampagneCommand, IdResponse>(
+                            new CreateChampagneCommand(name));
+                    champagnes.Add(response.Id);
+                    Console.WriteLine($"Champagne created: {response.Id} - {name}");
+                }
+                else
+                {
+                    var id = SelectOne(champagnes);
+
+                    await _commandRouter.RouteAsync<RenameChampagneCommand>(new RenameChampagneCommand(id, name));
+                    Console.WriteLine($"Champagne renamed: {id} - New name: {name}");
+                }
+
+                await Task.Delay(random.Next(1000, 3000));
             }
         }
     }

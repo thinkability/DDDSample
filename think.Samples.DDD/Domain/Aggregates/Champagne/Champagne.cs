@@ -14,6 +14,11 @@ namespace Domain.Aggregates.Champagne
         {
             RaiseEvent(new ChampagneCreated(cmd.Id.Value, cmd.Name));
         }
+
+        public void Execute(RenameChampagne cmd)
+        {
+            RaiseEvent(new ChampagneRenamed(Id.Value, Name, cmd.NewName));
+        }
         
         protected override void RegisterHandlers()
         {
@@ -22,6 +27,8 @@ namespace Domain.Aggregates.Champagne
                 Id = new AggregateId(e.Id);
                 Name = e.Name;
             });
+
+            Handle<ChampagneRenamed>(e => { Name = e.NewName; });
         }
     }
 }
