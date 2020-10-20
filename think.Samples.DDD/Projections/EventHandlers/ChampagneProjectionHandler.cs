@@ -9,7 +9,7 @@ namespace Projections.EventHandlers
     {
         public Task Handle(ChampagneCreated @event)
         {
-            Console.WriteLine("Received ChampagneCreated event:" + @event.Name.Value);
+            Console.WriteLine("Received ChampagneCreated event: " + @event.Name.Value);
             return Task.CompletedTask;
         }
 

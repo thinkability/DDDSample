@@ -46,14 +46,14 @@ namespace ProjectionsHost
             var eventHandlers = Container.GetInstance<IConsumer>();
             await eventHandlers.StartConsumer(new Subscription[]
             {
-                new Subscription<ChampagneCreated>("thinkSample", "ChampagneCreated"),
-                new Subscription<ChampagneRenamed>("thinkSample", "ChampagneRenamed"), 
+                new Subscription<ChampagneCreated>("WineCellarBC", "ChampagneCreated"),
+                new Subscription<ChampagneRenamed>("WineCellarBC", "ChampagneRenamed"), 
             });
 
             var integrationEventPublisher = Container.GetInstance<IConsumer>();
             await integrationEventPublisher.StartConsumer(new[]
             {
-                new Subscription<ChampagneCreated>("thinkSample", "ChampagneCreated"),
+                new Subscription<ChampagneCreated>("WineCellarBC", "ChampagneCreated"),
             });
 
             while (true)

@@ -48,7 +48,7 @@ namespace Producer
                         await _commandRouter.RouteAsync<CreateChampagneCommand, IdResponse>(
                             new CreateChampagneCommand(name));
                     champagnes.Add(response.Id);
-                    Console.WriteLine($"Champagne created: {response.Id} - {name}");
+                    Console.WriteLine($"Champagne created: {name} ({response.Id})");
                 }
                 else
                 {

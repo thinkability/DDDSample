@@ -4,11 +4,11 @@ namespace Domain
 {
     public class DomainEvent : IDomainEvent
     {
-        public DomainEvent(Guid id)
+        public DomainEvent(AggregateId id)
         {
             Id = id;
         }
 
-        public Guid Id { get; }
+        public AggregateId Id { get; }
     }
 }

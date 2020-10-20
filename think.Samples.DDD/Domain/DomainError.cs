@@ -9,9 +9,9 @@ namespace Domain
             
         }
 
-        public static DomainError WithMessage(string message)
+        public static DomainError Because(string reason)
         {
-            return new DomainError(message);
+            return new DomainError(reason);
         }
     }
 }

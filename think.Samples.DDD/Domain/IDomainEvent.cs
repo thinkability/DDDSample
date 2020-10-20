@@ -4,6 +4,6 @@ namespace Domain
 {
     public interface IDomainEvent
     {
-        Guid Id { get; }
+        AggregateId Id { get; }
     }
 }
