@@ -10,7 +10,7 @@ namespace Domain.Aggregates.Champagne
     {
         public ChampagneName Name { get; private set; }
         public IEnumerable<GrapeBlend> Grapes { get; private set; }
-        
+
         public void Execute(CreateChampagne cmd)
         {
             RaiseEvent(new ChampagneCreated(cmd.Id, cmd.Name));
@@ -25,6 +25,9 @@ namespace Domain.Aggregates.Champagne
         {
             if (cmd.Grapes.Sum(x => x.Percentage.Value) > 1)
                 throw DomainError.Because("Grape blends cannot exceed 100% combined");
+
+            if (cmd.Grapes.GroupBy(x => x.GrapeVariety).Any(x => x.Count() > 1))
+                throw DomainError.Because("A grape can only appear once in the blend");
             
             RaiseEvent(new GrapeBlendUpdated(Id, cmd.Grapes));
         }

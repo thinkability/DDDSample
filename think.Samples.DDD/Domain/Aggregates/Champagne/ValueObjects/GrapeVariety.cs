@@ -22,7 +22,7 @@ namespace Domain.Aggregates.Champagne.ValueObjects
                 throw new ArgumentException(nameof(value));
             
             if(!_allowedGrapeTypes.Contains(value))
-                throw new ArgumentException("Grape is not allowed in a champagne", nameof(value));
+                throw new ArgumentException($"Grape '{value}' is not allowed in a champagne", nameof(value));
         }
     }
 }
