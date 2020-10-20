@@ -5,7 +5,7 @@ namespace Domain.Aggregates.Champagne.ValueObjects
 {
     public class GrapeVariety: SingleValueObject<string>
     {
-        private string[] _allowedGrapeTypes = 
+        private readonly string[] _allowedGrapeTypes = 
         {
             "Chardonnay",
             "PinotNoir",
