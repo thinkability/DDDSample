@@ -2,10 +2,8 @@
 using Domain.Persistence;
 using Lamar;
 using Messaging;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Producer.Registry;
 
 namespace Producer

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Confluent.Kafka;
-using Confluent.Kafka.Serialization;
 using Domain.Aggregates.Champagne.Events;
 using Domain.Persistence;
 using Lamar;
